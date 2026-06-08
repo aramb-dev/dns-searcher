@@ -3,6 +3,16 @@ import type {
   DomainCheckResult,
   DomainSearchProvider,
 } from "@/lib/domainSearch/types"
+import { ProxyAgent } from "undici"
+
+function getFetchOptions(signal?: AbortSignal) {
+  const options: RequestInit & { dispatcher?: any } = { signal }
+  const proxyUrl = process.env.FIXIE_URL || process.env.HTTP_PROXY || process.env.HTTPS_PROXY
+  if (proxyUrl) {
+    options.dispatcher = new ProxyAgent(proxyUrl)
+  }
+  return options
+}
 
 const defaultNamecheapApiUrl = "https://api.namecheap.com/xml.response"
 
@@ -144,7 +154,7 @@ async function fetchNamecheapPricing(tlds: string[]) {
       }).toString()
 
       const response = await withTimeout("namecheap-pricing-timeout", (signal) =>
-        fetch(url, { signal }),
+        fetch(url, getFetchOptions(signal)),
       )
       const xml = await response.text()
       const parsed = parseNamecheapPricingResponse(xml).get(tld)
@@ -219,7 +229,7 @@ export const namecheapProvider: DomainSearchProvider = {
         }).toString()
 
         const response = await withTimeout("namecheap-check-timeout", (signal) =>
-          fetch(url, { signal }),
+          fetch(url, getFetchOptions(signal)),
         )
         const xml = await response.text()
         const parsed = parseNamecheapCheckResponse(xml)
