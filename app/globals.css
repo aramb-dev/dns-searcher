@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+:root {
+  --page-background: #fffdf8;
+  --background: #ffffff;
+  --foreground: #10202e;
+  --panel: rgba(255, 255, 255, 0.68);
+  --panel-muted: rgba(242, 248, 249, 0.86);
+  --border-strong: rgba(16, 32, 46, 0.12);
+  --border-soft: rgba(16, 32, 46, 0.08);
+  --ink-strong: #10202e;
+  --ink-soft: #355066;
+  --ink-muted: #6f8796;
+  --teal-500: #0f9f98;
+  --teal-ring: rgba(15, 159, 152, 0.16);
+  --coral-500: #f16a4f;
+  --coral-600: #df5b42;
+  --coral-wash: rgba(241, 106, 79, 0.08);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-space-grotesk);
+  --font-mono: var(--font-ibm-plex-mono);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--page-background);
+  color: var(--foreground);
+  font-family: var(--font-space-grotesk), sans-serif;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+::selection {
+  background: rgba(15, 159, 152, 0.18);
+}
