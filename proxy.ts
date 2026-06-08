@@ -10,6 +10,24 @@ const LIMIT = 10 // Max requests per window
 const WINDOW_MS = 60 * 1000 // 1 minute window (60 seconds)
 
 export async function proxy(request: NextRequest) {
+  // Inspect request body to check if Namecheap is selected.
+  // We only rate-limit searches that include Namecheap because Namecheap calls
+  // route through our rate-limited proxy. Cloudflare & Vercel searches are unmetered.
+  if (request.method === "POST") {
+    try {
+      const clonedRequest = request.clone()
+      const body = await clonedRequest.json()
+      const providers = body?.providers as string[] | undefined
+
+      // If providers array is specified and does NOT contain "namecheap", skip rate limiting.
+      if (providers && !providers.includes("namecheap")) {
+        return NextResponse.next()
+      }
+    } catch (error) {
+      console.warn("[proxy] Failed to parse request body for Namecheap filtering, applying fallback rate-limit:", error)
+    }
+  }
+
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0] 
     || request.headers.get("x-real-ip") 
     || "127.0.0.1"
