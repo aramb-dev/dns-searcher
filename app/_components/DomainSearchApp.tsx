@@ -305,7 +305,7 @@ export function DomainSearchApp() {
                 spellCheck={false}
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                placeholder="e.g., jobticket…"
+                placeholder="yourdomain…"
                 className="w-full rounded-2xl border border-[color:var(--border-strong)] bg-slate-50/50 px-5 py-4 text-xl font-semibold text-[color:var(--ink-strong)] outline-none transition focus-visible:border-[color:var(--teal-500)] focus-visible:ring-4 focus-visible:ring-[color:var(--teal-ring)]"
               />
               {query && (
